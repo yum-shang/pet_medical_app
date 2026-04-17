@@ -81,15 +81,15 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: AppColors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: const Icon(Icons.notifications_none, color: Colors.white),
-                    ),
+                    // Container(
+                    //   width: 40,
+                    //   height: 40,
+                    //   decoration: BoxDecoration(
+                    //     color: AppColors.white.withOpacity(0.2),
+                    //     borderRadius: BorderRadius.circular(16),
+                    //   ),
+                    //   child: const Icon(Icons.notifications_none, color: Colors.white),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -111,7 +111,23 @@ class HomeScreen extends StatelessWidget {
                         label: '预约挂号',
                         iconBgColor: AppColors.primaryLight,
                         iconColor: AppColors.primary,
-                        onTap: () => context.push('#'),
+                        onTap: (){
+                            showDialog(
+                              context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('待实现的alert'),
+                                content: Text('这是待实现的alert'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: Text('确定'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        }
                       ),
                       QuickActionButton(
                         icon: Icons.smart_toy,
