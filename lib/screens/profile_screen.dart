@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:go_router/go_router.dart';
 import '../core/app_colors.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -47,7 +48,8 @@ class ProfileScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Container(
-                margin: const EdgeInsets.only(top: -64),
+                margin: const EdgeInsets.only(top: 0),
+                transform: Matrix4.translationValues(0, -64, 0),
                 padding: const EdgeInsets.all(24),
                 decoration: BoxDecoration(
                   color: AppColors.white,
@@ -236,23 +238,34 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   _buildMenuItem(
                     Icons.file_present, 
-                    '我的电子病历表',
+                    '宠物电子病历表',
                     backgroundColor: const Color(0xFFEFF6FF),
                     iconColor: const Color(0xFF60A5FA),
+                    onTap: () {
+                        context.go('#');
+                      },
                   ),
                   const SizedBox(height: 12),
+
                   _buildMenuItem(
                     Icons.account_balance_wallet, 
                     '费用报销与账单',
                     backgroundColor: const Color(0xFFFEF3C7),
                     iconColor: const Color(0xFFF59E0B),
+                    onTap: () {
+                        context.go('#');
+                      },
                   ),
                   const SizedBox(height: 12),
+
                   _buildMenuItem(
                     Icons.shield, 
                     '宠物保险与协议',
                     backgroundColor: const Color(0xFFF3E8FF),
                     iconColor: const Color(0xFFA78BFA),
+                    onTap: () {
+                        context.go('#');
+                      }
                   ),
                   const SizedBox(height: 12),
                   _buildMenuItem(
@@ -262,7 +275,12 @@ class ProfileScreen extends StatelessWidget {
                     iconColor: const Color(0xFFF87171),
                     textColor: const Color(0xFFF87171),
                     showChevron: false,
+                    onTap: () {
+                        //context.go('/login');
+                    },
+
                   ),
+                  
                 ],
               ),
             ),
@@ -278,10 +296,10 @@ class ProfileScreen extends StatelessWidget {
     Color backgroundColor = AppColors.primaryLight,
     Color iconColor = AppColors.primary,
     Color textColor = AppColors.textMain,
-    bool showChevron = true,
+    bool showChevron = true, required Null Function() onTap,
   }) {
     return GestureDetector(
-      onTap: () {},
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(

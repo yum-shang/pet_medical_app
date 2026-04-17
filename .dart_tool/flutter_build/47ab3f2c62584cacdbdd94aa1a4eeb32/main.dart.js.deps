@@ -407,6 +407,10 @@ file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.28.0/lib/
 file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.28.0/lib/subjects.dart
 file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.28.0/lib/transformers.dart
 file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/rxdart-0.28.0/lib/utils.dart
+file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.5.5/lib/shared_preferences.dart
+file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.5.5/lib/src/shared_preferences_async.dart
+file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.5.5/lib/src/shared_preferences_devtools_extension_data.dart
+file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences-2.5.5/lib/src/shared_preferences_legacy.dart
 file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_platform_interface-2.4.2/lib/method_channel_shared_preferences.dart
 file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_platform_interface-2.4.2/lib/shared_preferences_async_platform_interface.dart
 file:///C:/Users/33583/AppData/Local/Pub/Cache/hosted/pub.dev/shared_preferences_platform_interface-2.4.2/lib/shared_preferences_platform_interface.dart
@@ -1426,10 +1430,12 @@ file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/add_pet_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/ai_chat_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/home_screen.dart
+file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/login_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/main_shell.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/pet_detail_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/pets_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/profile_screen.dart
+file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/register_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/screens.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/services/mock_data_service.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/widgets/appointment_card.dart

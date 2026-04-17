@@ -118,7 +118,10 @@ class HomeScreen extends StatelessWidget {
                         label: 'AI 问诊',
                         iconBgColor: AppColors.secondaryLight,
                         iconColor: AppColors.secondary,
-                        onTap: () => context.go('/ai-chat'),
+                        onTap: () {
+                          Provider.of<NavigationProvider>(context, listen: false).setIndex(3);
+                          context.go('/ai-chat');
+                        },
                       ),
                       QuickActionButton(
                         icon: Icons.add,

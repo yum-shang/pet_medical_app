@@ -5,3 +5,5 @@ export 'pet_detail_screen.dart';
 export 'ai_chat_screen.dart';
 export 'profile_screen.dart';
 export 'main_shell.dart';
+export 'login_screen.dart';
+export 'register_screen.dart';

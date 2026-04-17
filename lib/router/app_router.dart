@@ -4,7 +4,7 @@ import '../screens/screens.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
-    initialLocation: '/',
+    initialLocation: '/login',
     routes: [
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
@@ -38,6 +38,16 @@ class AppRouter {
             ),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/login',
+        name: 'login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
         path: '/add-pet',
