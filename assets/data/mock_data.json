@@ -1,0 +1,56 @@
+{
+  "pets": [
+    {
+      "id": "1",
+      "name": "小橘",
+      "type": "cat",
+      "breed": "中华田园猫",
+      "gender": "male",
+      "birthDate": "2024-01-15",
+      "weight": 4.5,
+      "isNeutered": false,
+      "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200"
+    }
+  ],
+  "medicalRecords": [
+    {
+      "id": "1",
+      "petId": "1",
+      "date": "2026-03-25T10:30:00",
+      "title": "猫咪过敏性皮炎复查",
+      "description": "医生主诉：患猫精神状态良好，皮肤红肿处已明显消退，建议继续使用外用喷剂一周。",
+      "doctorName": "张晓明",
+      "hospital": "爱心宠物医院总部",
+      "status": "closed"
+    }
+  ],
+  "chatMessages": [
+    {
+      "id": "1",
+      "content": "家长你好！我是小宠 AI。有什么能帮到你的？你可以描述一下毛孩子的**呕吐、食欲、精神**等情况。",
+      "type": "ai",
+      "timestamp": "2026-04-17T10:30:00"
+    }
+  ],
+  "appointments": [
+    {
+      "id": "1",
+      "petId": "1",
+      "petName": "小橘",
+      "doctorName": "张医生",
+      "hospital": "爱心宠物医院总部",
+      "dateTime": "明天 14:00",
+      "reminderType": "就诊提醒",
+      "department": "皮肤科复查"
+    }
+  ],
+  "user": {
+    "id": "20260325001",
+    "name": "元元家长",
+    "phone": "138****8888",
+    "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+    "petCount": 2,
+    "visitCount": 12,
+    "pendingPayment": 0
+  }
+}

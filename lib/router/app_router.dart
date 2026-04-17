@@ -1,0 +1,57 @@
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../screens/screens.dart';
+
+class AppRouter {
+  static final GoRouter router = GoRouter(
+    initialLocation: '/',
+    routes: [
+      ShellRoute(
+        builder: (context, state, child) => MainShell(child: child),
+        routes: [
+          GoRoute(
+            path: '/',
+            name: 'home',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: HomeScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/pets',
+            name: 'pets',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: PetsScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/ai-chat',
+            name: 'ai-chat',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: AiChatScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/profile',
+            name: 'profile',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: ProfileScreen(),
+            ),
+          ),
+        ],
+      ),
+      GoRoute(
+        path: '/add-pet',
+        name: 'add-pet',
+        builder: (context, state) => const AddPetScreen(),
+      ),
+      GoRoute(
+        path: '/pet-detail/:id',
+        name: 'pet-detail',
+        builder: (context, state) {
+          final petId = state.pathParameters['id']!;
+          return PetDetailScreen(petId: petId);
+        },
+      ),
+    ],
+  );
+}
