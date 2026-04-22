@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/screens.dart';
+import '../models/models.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -21,6 +22,13 @@ class AppRouter {
             name: 'pets',
             pageBuilder: (context, state) => const NoTransitionPage(
               child: PetsScreen(),
+            ),
+          ),
+          GoRoute(
+            path: '/book',
+            name: 'book',
+            pageBuilder: (context, state) => const NoTransitionPage(
+              child: BookScreen(),
             ),
           ),
           GoRoute(
@@ -60,6 +68,19 @@ class AppRouter {
         builder: (context, state) {
           final petId = state.pathParameters['id']!;
           return PetDetailScreen(petId: petId);
+        },
+      ),
+      GoRoute(
+        path: '/pet-medical',
+        name: 'pet-medical',
+        builder: (context, state) => const PetMedicalRecordScreen(),
+      ),
+      GoRoute(
+        path: '/pet-medical-detail',
+        name: 'pet-medical-detail',
+        builder: (context, state) {
+          final pet = state.extra as Pet;
+          return PetMedicalDetailScreen(pet: pet);
         },
       ),
     ],

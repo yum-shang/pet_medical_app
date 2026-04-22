@@ -1417,6 +1417,7 @@ file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/core/app_colors.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/core/app_theme.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/main.dart
+file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/models/appointment.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/models/chat_message.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/models/medical_record.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/models/models.dart
@@ -1429,10 +1430,12 @@ file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/router/app_router.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/add_pet_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/ai_chat_screen.dart
+file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/book_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/home_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/login_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/main_shell.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/pet_detail_screen.dart
+file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/pet_medical_record_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/pets_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/profile_screen.dart
 file:///D:/Users/33583/Desktop/%E5%8F%8C%E5%88%9B%E8%B5%9B/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9%20(2)/pet_medical_app/lib/screens/register_screen.dart

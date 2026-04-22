@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../core/app_colors.dart';
+import '../models/models.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
@@ -30,11 +31,43 @@ class _AiChatScreenState extends State<AiChatScreen> {
     chatProvider.addUserMessage(text);
     _messageController.clear();
 
-    Future.delayed(const Duration(milliseconds: 1000), () {
-      chatProvider.addAiMessage(
-        '收到。干呕且食欲不振可能与毛球症或轻微胃炎有关。\n\n建议检查：\n1. 是否有排便困难？\n2. 测量体温是否超过39.2℃？',
-      );
-    });
+    // 模拟流式输出
+    _simulateStreamingResponse(chatProvider);
+  }
+
+  void _simulateStreamingResponse(ChatProvider chatProvider) {
+    // 开始AI输入状态
+    chatProvider.startAiTyping();
+
+    // 模拟回复内容
+    const response = '收到。干呕且食欲不振可能与毛球症或轻微胃炎有关。\n\n建议检查：\n1. 是否有排便困难？\n2. 测量体温是否超过39.2℃？';
+    
+    // 流式输出模拟
+    int index = 0;
+    const delay = Duration(milliseconds: 50); // 每个字符的延迟
+
+    void streamNext() {
+      if (index < response.length) {
+        // 每次添加1-3个字符，模拟真实的打字效果
+        int endIndex = index + (index % 3 + 1);
+        if (endIndex > response.length) {
+          endIndex = response.length;
+        }
+        
+        String partial = response.substring(index, endIndex);
+        chatProvider.updateAiMessage(partial);
+        index = endIndex;
+        
+        // 继续流式输出
+        Future.delayed(delay, streamNext);
+      } else {
+        // 完成输出
+        chatProvider.finishAiMessage();
+      }
+    }
+
+    // 开始流式输出
+    Future.delayed(const Duration(seconds: 1), streamNext);
   }
 
   void _scrollToBottom() {
@@ -119,11 +152,25 @@ class _AiChatScreenState extends State<AiChatScreen> {
                   return ListView.separated(
                     controller: _scrollController,
                     padding: const EdgeInsets.all(24),
-                    itemCount: chatProvider.messages.length,
+                    itemCount: chatProvider.messages.length + (chatProvider.isTyping ? 1 : 0),
                     separatorBuilder: (_, __) => const SizedBox(height: 24),
                     itemBuilder: (context, index) {
-                      final message = chatProvider.messages[index];
-                      return ChatBubble(message: message);
+                      if (index < chatProvider.messages.length) {
+                        final message = chatProvider.messages[index];
+                        return ChatBubble(message: message);
+                      } else if (chatProvider.isTyping) {
+                        // 显示AI正在输入的消息
+                        return ChatBubble(
+                          message: ChatMessage(
+                            id: 'typing',
+                            content: chatProvider.currentAiMessageContent,
+                            type: MessageType.ai,
+                            timestamp: DateTime.now(),
+                          ),
+                        );
+                      } else {
+                        return const SizedBox();
+                      }
                     },
                   );
                 },

@@ -111,22 +111,9 @@ class HomeScreen extends StatelessWidget {
                         label: '预约挂号',
                         iconBgColor: AppColors.primaryLight,
                         iconColor: AppColors.primary,
-                        onTap: (){
-                            showDialog(
-                              context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('待实现的alert'),
-                                content: Text('这是待实现的alert'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(context).pop(),
-                                    child: Text('确定'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
+                        onTap: () {
+                          Provider.of<NavigationProvider>(context, listen: false).setIndex(2);
+                          context.go('/book');
                         }
                       ),
                       QuickActionButton(

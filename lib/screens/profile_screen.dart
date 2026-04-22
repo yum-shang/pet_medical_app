@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../core/app_colors.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -242,7 +243,7 @@ class ProfileScreen extends StatelessWidget {
                     backgroundColor: const Color(0xFFEFF6FF),
                     iconColor: const Color(0xFF60A5FA),
                     onTap: () {
-                        context.go('#');
+                        context.push('/pet-medical');
                       },
                   ),
                   const SizedBox(height: 12),
@@ -276,9 +277,21 @@ class ProfileScreen extends StatelessWidget {
                     textColor: const Color(0xFFF87171),
                     showChevron: false,
                     onTap: () {
-                        //context.go('/login');
-                    },
+                      // 清除登录状态并跳转到登录页面
+                      Future.microtask(() async {
+                        final prefs = await SharedPreferences.getInstance();
+                        await prefs.setBool('is_logged_in', false);
+                        await prefs.remove('user_phone');
+                        await prefs.remove('saved_phone');
+                        await prefs.remove('saved_password');
+                        await prefs.setBool('remember_me', false);
 
+                        // 跳转到登录页面
+                        if (context.mounted) {
+                          context.go('/login');
+                        }
+                      });
+                    },
                   ),
                   
                 ],

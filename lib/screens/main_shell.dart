@@ -52,7 +52,7 @@ class MainShell extends StatelessWidget {
                       isSelected: navProvider.currentIndex == 2,
                       onTap: () {
                         navProvider.setIndex(2);
-                        context.go('/');
+                        context.go('/book');
                       },
                     ),
                     _NavItem(

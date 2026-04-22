@@ -7,3 +7,5 @@ export 'profile_screen.dart';
 export 'main_shell.dart';
 export 'login_screen.dart';
 export 'register_screen.dart';
+export 'book_screen.dart';
+export 'pet_medical_record_screen.dart';
