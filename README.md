@@ -4,12 +4,15 @@
 
 ## 功能特性
 
+- 用户登录/注册（手机号+密码，记住密码）
 - 首页问候卡片与快捷入口（预约挂号、AI问诊、添加宠物）
 - 待办行程展示（就诊提醒）
 - 宠物档案管理（增删改查）
 - 宠物健康报告与历史诊疗记录
-- AI 智能导诊聊天界面
-- 个人中心（用户信息、统计数据、功能菜单）
+- 宠物电子病历表（病历详情、病史、疫苗接种、过敏史）
+- 预约挂号（选择宠物、医生、日期和时间）
+- AI 智能导诊聊天界面（流式输出）
+- 个人中心（用户信息、统计数据、功能菜单、退出登录）
 
 ## 项目结构
 
@@ -31,6 +34,7 @@ pet_medical_app/
     │   ├── pet.dart                   # 宠物模型
     │   ├── medical_record.dart         # 诊疗记录模型
     │   ├── chat_message.dart           # 聊天消息模型
+    │   ├── appointment.dart            # 预约/医生模型
     │   └── models.dart                 # barrel 文件
     │
     ├── providers/                      # 状态管理 (Provider)
@@ -57,10 +61,14 @@ pet_medical_app/
     │   └── widgets.dart               # barrel 文件
     │
     └── screens/                        # 页面
+        ├── login_screen.dart           # 登录页
+        ├── register_screen.dart        # 注册页
         ├── home_screen.dart            # 首页
         ├── pets_screen.dart            # 宠物档案页
         ├── add_pet_screen.dart         # 添加宠物页
         ├── pet_detail_screen.dart      # 宠物详情页
+        ├── pet_medical_record_screen.dart # 宠物电子病历表
+        ├── book_screen.dart            # 预约挂号页
         ├── ai_chat_screen.dart         # AI 问诊页
         ├── profile_screen.dart         # 个人中心页
         ├── main_shell.dart             # 底部导航容器
@@ -132,10 +140,15 @@ flutter build ios --release
 
 | 路径 | 页面 |
 |------|------|
+| `/login` | 登录页 |
+| `/register` | 注册页 |
 | `/` | 首页 |
 | `/pets` | 宠物档案 |
 | `/add-pet` | 添加宠物 |
 | `/pet-detail/:id` | 宠物详情 |
+| `/pet-medical` | 宠物电子病历表 |
+| `/pet-medical-detail` | 宠物病历详情 |
+| `/book` | 预约挂号 |
 | `/ai-chat` | AI 问诊 |
 | `/profile` | 个人中心 |
 

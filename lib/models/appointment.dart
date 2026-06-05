@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 class Appointment {
   final String id;
   final String petId;

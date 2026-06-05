@@ -30,6 +30,7 @@ class _AiChatScreenState extends State<AiChatScreen> {
     final chatProvider = context.read<ChatProvider>();
     chatProvider.addUserMessage(text);
     _messageController.clear();
+    _scrollToBottom();
 
     // 模拟流式输出
     _simulateStreamingResponse(chatProvider);
