@@ -16,6 +16,8 @@ class PetMedicalApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => PetProvider()),
         ChangeNotifierProvider(create: (_) => MedicalRecordProvider()),
         ChangeNotifierProvider(create: (_) => ChatProvider()),

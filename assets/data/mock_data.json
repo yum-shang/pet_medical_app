@@ -3,34 +3,87 @@
     {
       "id": "1",
       "name": "小橘",
-      "type": "cat",
+      "type": "猫",
       "breed": "中华田园猫",
       "gender": "male",
       "birthDate": "2024-01-15",
       "weight": 4.5,
       "isNeutered": false,
       "imageUrl": "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=200"
+    },
+    {
+      "id": "2",
+      "name": "旺财",
+      "type": "狗",
+      "breed": "金毛寻回犬",
+      "gender": "male",
+      "birthDate": "2022-06-10",
+      "weight": 28.0,
+      "isNeutered": true,
+      "imageUrl": "https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200"
     }
+  ],
+  "hospitals": [
+    { "id": 1, "hospital_name": "爱心宠物医院总部" },
+    { "id": 2, "hospital_name": "瑞鹏宠物医疗中心" }
+  ],
+  "doctors": [
+    { "id": 1, "hospital_id": 1, "doctor_name": "张医生", "title": "主治医师" },
+    { "id": 2, "hospital_id": 1, "doctor_name": "李医生", "title": "副主任医师" },
+    { "id": 3, "hospital_id": 2, "doctor_name": "王医生", "title": "主任医师" }
   ],
   "medicalRecords": [
     {
-      "id": "1",
-      "petId": "1",
-      "date": "2026-03-25T10:30:00",
-      "title": "猫咪过敏性皮炎复查",
-      "description": "医生主诉：患猫精神状态良好，皮肤红肿处已明显消退，建议继续使用外用喷剂一周。",
-      "doctorName": "张晓明",
-      "hospital": "爱心宠物医院总部",
-      "status": "closed"
+      "id": 1,
+      "pet_id": 1,
+      "doctor_name": "张晓明",
+      "chief_complaint": "猫咪过敏性皮炎复查",
+      "present_history": "患猫精神状态良好，皮肤红肿处已明显消退",
+      "doctor_advice": "建议继续使用外用喷剂一周，观察48小时",
+      "visit_time": "2026-03-25 10:30:00",
+      "status": 2
+    }
+  ],
+  "medicalHistories": [
+    {
+      "id": 1,
+      "pet_id": 1,
+      "history_type": "过敏史",
+      "description": "对某种猫粮过敏，曾出现皮肤瘙痒",
+      "diagnosed_at": "2025-08-12",
+      "is_current": 1
+    }
+  ],
+  "vaccinations": [
+    {
+      "id": 1,
+      "pet_id": 1,
+      "vaccine_name": "猫三联",
+      "vaccination_date": "2025-12-01",
+      "next_due_date": "2026-12-01",
+      "hospital_name": "爱心宠物医院总部"
+    }
+  ],
+  "allergies": [
+    {
+      "id": 1,
+      "pet_id": 1,
+      "allergen": "鱼类蛋白",
+      "symptom_description": "食用后皮肤瘙痒、掉毛",
+      "severity_level": 2
     }
   ],
   "chatMessages": [
     {
-      "id": "1",
-      "content": "家长你好！我是小宠 AI。有什么能帮到你的？你可以描述一下毛孩子的**呕吐、食欲、精神**等情况。",
+      "id": 1,
+      "content": "家长你好！我是小宠 AI。有什么能帮到你的？你可以描述一下毛孩子的呕吐、食欲、精神等情况。",
       "type": "ai",
       "timestamp": "2026-04-17T10:30:00"
     }
+  ],
+  "aiReplies": [
+    "根据您描述的情况，毛孩子可能是轻微消化不良。建议先禁食4-6小时，提供充足清水，观察精神状态和排便情况。",
+    "如果持续呕吐超过24小时，或出现血便、精神萎靡，请尽快预约线下就诊。"
   ],
   "appointments": [
     {
@@ -45,9 +98,11 @@
     }
   ],
   "user": {
-    "id": "20260325001",
+    "id": "1",
+    "username": "user001",
     "name": "元元家长",
-    "phone": "138****8888",
+    "phone": "13800000000",
+    "email": "user001@example.com",
     "avatarUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
     "petCount": 2,
     "visitCount": 12,

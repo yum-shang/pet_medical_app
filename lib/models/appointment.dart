@@ -1,99 +1,73 @@
-class Appointment {
-  final String id;
-  final String petId;
-  final String petName;
-  final String doctorId;
-  final String doctorName;
-  final String hospital;
-  final String department;
-  final DateTime dateTime;
-  final String status; // pending, confirmed, completed, cancelled
+class AppointmentVO {
+  final int id;
+  final String? appointmentNo;
+  final int? userId;
+  final String? userNickname;
+  final int? petId;
+  final String? petName;
+  final int? hospitalId;
+  final String? hospitalName;
+  final int? doctorId;
+  final String? doctorName;
+  final int appointmentType;
+  final String? symptomDescription;
+  final String? appointmentTime;
+  final String? reminderTime;
+  final int status;
+  final int? source;
+  final String? createdAt;
+  final String? updatedAt;
 
-  Appointment({
+  AppointmentVO({
     required this.id,
-    required this.petId,
-    required this.petName,
-    required this.doctorId,
-    required this.doctorName,
-    required this.hospital,
-    required this.department,
-    required this.dateTime,
-    required this.status,
+    this.appointmentNo,
+    this.userId,
+    this.userNickname,
+    this.petId,
+    this.petName,
+    this.hospitalId,
+    this.hospitalName,
+    this.doctorId,
+    this.doctorName,
+    this.appointmentType = 1,
+    this.symptomDescription,
+    this.appointmentTime,
+    this.reminderTime,
+    this.status = 1,
+    this.source,
+    this.createdAt,
+    this.updatedAt,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'petId': petId,
-      'petName': petName,
-      'doctorId': doctorId,
-      'doctorName': doctorName,
-      'hospital': hospital,
-      'department': department,
-      'dateTime': dateTime.toIso8601String(),
-      'status': status,
-    };
-  }
-
-  factory Appointment.fromJson(Map<String, dynamic> json) {
-    return Appointment(
-      id: json['id'],
-      petId: json['petId'],
-      petName: json['petName'],
-      doctorId: json['doctorId'],
-      doctorName: json['doctorName'],
-      hospital: json['hospital'],
-      department: json['department'],
-      dateTime: DateTime.parse(json['dateTime']),
-      status: json['status'],
+  factory AppointmentVO.fromJson(Map<String, dynamic> json) {
+    return AppointmentVO(
+      id: json['id'] ?? 0,
+      appointmentNo: json['appointment_no'],
+      userId: json['user_id'],
+      userNickname: json['user_nickname'],
+      petId: json['pet_id'],
+      petName: json['pet_name'],
+      hospitalId: json['hospital_id'],
+      hospitalName: json['hospital_name'],
+      doctorId: json['doctor_id'],
+      doctorName: json['doctor_name'],
+      appointmentType: json['appointment_type'] ?? 1,
+      symptomDescription: json['symptom_description'],
+      appointmentTime: json['appointment_time'],
+      reminderTime: json['reminder_time'],
+      status: json['status'] ?? 1,
+      source: json['source'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
     );
   }
-}
 
-class Doctor {
-  final String id;
-  final String name;
-  final String title;
-  final String specialty;
-  final String avatar;
-  final String hospital;
-  final List<String> availableDays;
-  final List<String> availableTimes;
-
-  Doctor({
-    required this.id,
-    required this.name,
-    required this.title,
-    required this.specialty,
-    required this.avatar,
-    required this.hospital,
-    required this.availableDays,
-    required this.availableTimes,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-      'title': title,
-      'specialty': specialty,
-      'avatar': avatar,
-      'hospital': hospital,
-      'availableDays': availableDays,
-      'availableTimes': availableTimes,
-    };
-  }
-
-  factory Doctor.fromJson(Map<String, dynamic> json) {
-    return Doctor(
-      id: json['id'],
-      name: json['name'],
-      title: json['title'],
-      specialty: json['specialty'],
-      avatar: json['avatar'],
-      hospital: json['hospital'],
-      availableDays: List<String>.from(json['availableDays']),
-      availableTimes: List<String>.from(json['availableTimes']),
-    );
-  }
+  Map<String, dynamic> toCreateJson() => {
+        'pet_id': petId,
+        'hospital_id': hospitalId,
+        'doctor_id': doctorId,
+        'appointment_type': appointmentType,
+        'symptom_description': symptomDescription,
+        'appointment_time': appointmentTime,
+      };
 }

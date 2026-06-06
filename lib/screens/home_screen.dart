@@ -6,8 +6,21 @@ import '../core/app_colors.dart';
 import '../providers/providers.dart';
 import '../widgets/widgets.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<PetProvider>().loadPets();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +37,7 @@ class HomeScreen extends StatelessWidget {
                 bottomRight: Radius.circular(96),
               ),
               boxShadow: [
-                BoxShadow(
-                  color: Color(0x4000AFA3),
-                  blurRadius: 20,
-                  offset: Offset(0, 10),
-                ),
+                BoxShadow(color: Color(0x4000AFA3), blurRadius: 20, offset: Offset(0, 10)),
               ],
             ),
             child: Column(
@@ -40,56 +49,34 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: CachedNetworkImage(
-                            imageUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-                            width: 56,
-                            height: 56,
-                            placeholder: (context, url) => Container(
-                              width: 56,
-                              height: 56,
-                              color: AppColors.white.withOpacity(0.2),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              width: 56,
-                              height: 56,
-                              color: AppColors.white.withOpacity(0.2),
-                              child: const Icon(Icons.person, color: Colors.white),
-                            ),
+                          child: Consumer<AuthProvider>(
+                            builder: (context, auth, _) {
+                              return CachedNetworkImage(
+                                imageUrl: auth.currentUser?.avatarUrl ?? 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+                                width: 56,
+                                height: 56,
+                                placeholder: (_, __) => Container(width: 56, height: 56, color: AppColors.white.withOpacity(0.2)),
+                                errorWidget: (_, __, ___) => Container(width: 56, height: 56, color: AppColors.white.withOpacity(0.2), child: const Icon(Icons.person, color: Colors.white)),
+                              );
+                            },
                           ),
                         ),
                         const SizedBox(width: 12),
-                        const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '早上好，元元家长',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w900,
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Text(
-                              '今天又是元气满满的一天',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white70,
-                              ),
-                            ),
-                          ],
+                        Consumer<AuthProvider>(
+                          builder: (context, auth, _) {
+                            final name = auth.currentUser?.nickname ?? auth.currentUser?.username ?? '用户';
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text('早上好，$name', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900, color: Colors.white)),
+                                const SizedBox(height: 4),
+                                const Text('今天又是元气满满的一天', style: TextStyle(fontSize: 12, color: Colors.white70)),
+                              ],
+                            );
+                          },
                         ),
                       ],
                     ),
-                    // Container(
-                    //   width: 40,
-                    //   height: 40,
-                    //   decoration: BoxDecoration(
-                    //     color: AppColors.white.withOpacity(0.2),
-                    //     borderRadius: BorderRadius.circular(16),
-                    //   ),
-                    //   child: const Icon(Icons.notifications_none, color: Colors.white),
-                    // ),
                   ],
                 ),
                 const SizedBox(height: 24),
@@ -112,9 +99,9 @@ class HomeScreen extends StatelessWidget {
                         iconBgColor: AppColors.primaryLight,
                         iconColor: AppColors.primary,
                         onTap: () {
-                          Provider.of<NavigationProvider>(context, listen: false).setIndex(2);
+                          context.read<NavigationProvider>().setIndex(2);
                           context.go('/book');
-                        }
+                        },
                       ),
                       QuickActionButton(
                         icon: Icons.smart_toy,
@@ -122,7 +109,7 @@ class HomeScreen extends StatelessWidget {
                         iconBgColor: AppColors.secondaryLight,
                         iconColor: AppColors.secondary,
                         onTap: () {
-                          Provider.of<NavigationProvider>(context, listen: false).setIndex(3);
+                          context.read<NavigationProvider>().setIndex(3);
                           context.go('/ai-chat');
                         },
                       ),
@@ -138,23 +125,9 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: 40),
                   Row(
                     children: [
-                      Container(
-                        width: 4,
-                        height: 20,
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
+                      Container(width: 4, height: 20, decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(2))),
                       const SizedBox(width: 8),
-                      const Text(
-                        '待办行程',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w900,
-                          color: AppColors.textMain,
-                        ),
-                      ),
+                      const Text('待办行程', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w900, color: AppColors.textMain)),
                     ],
                   ),
                   const SizedBox(height: 16),

@@ -1,6 +1,5 @@
 import 'package:go_router/go_router.dart';
 import '../screens/screens.dart';
-import '../models/models.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -12,37 +11,27 @@ class AppRouter {
           GoRoute(
             path: '/',
             name: 'home',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: HomeScreen(),
-            ),
+            pageBuilder: (context, state) => const NoTransitionPage(child: HomeScreen()),
           ),
           GoRoute(
             path: '/pets',
             name: 'pets',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: PetsScreen(),
-            ),
+            pageBuilder: (context, state) => const NoTransitionPage(child: PetsScreen()),
           ),
           GoRoute(
             path: '/book',
             name: 'book',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: BookScreen(),
-            ),
+            pageBuilder: (context, state) => const NoTransitionPage(child: BookScreen()),
           ),
           GoRoute(
             path: '/ai-chat',
             name: 'ai-chat',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: AiChatScreen(),
-            ),
+            pageBuilder: (context, state) => const NoTransitionPage(child: AiChatScreen()),
           ),
           GoRoute(
             path: '/profile',
             name: 'profile',
-            pageBuilder: (context, state) => const NoTransitionPage(
-              child: ProfileScreen(),
-            ),
+            pageBuilder: (context, state) => const NoTransitionPage(child: ProfileScreen()),
           ),
         ],
       ),
@@ -59,14 +48,25 @@ class AppRouter {
       GoRoute(
         path: '/add-pet',
         name: 'add-pet',
-        builder: (context, state) => const AddPetScreen(),
+        builder: (context, state) {
+          final petId = state.extra as int?;
+          return AddPetScreen(petId: petId);
+        },
       ),
       GoRoute(
         path: '/pet-detail/:id',
         name: 'pet-detail',
         builder: (context, state) {
-          final petId = state.pathParameters['id']!;
+          final petId = int.tryParse(state.pathParameters['id'] ?? '0') ?? 0;
           return PetDetailScreen(petId: petId);
+        },
+      ),
+      GoRoute(
+        path: '/pet-edit/:id',
+        name: 'pet-edit',
+        builder: (context, state) {
+          final petId = int.tryParse(state.pathParameters['id'] ?? '0') ?? 0;
+          return EditPetScreen(petId: petId);
         },
       ),
       GoRoute(
@@ -75,11 +75,16 @@ class AppRouter {
         builder: (context, state) => const PetMedicalRecordScreen(),
       ),
       GoRoute(
-        path: '/pet-medical-detail',
-        name: 'pet-medical-detail',
+        path: '/settings',
+        name: 'settings',
+        builder: (context, state) => const SettingsScreen(),
+      ),
+      GoRoute(
+        path: '/settings/:type',
+        name: 'settings-edit',
         builder: (context, state) {
-          final pet = state.extra as Pet;
-          return PetMedicalDetailScreen(pet: pet);
+          final type = state.pathParameters['type'];
+          return SettingsEditScreen(editType: settingsEditTypeFromPath(type));
         },
       ),
     ],

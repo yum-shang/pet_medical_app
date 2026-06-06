@@ -1,4 +1,10 @@
+export 'api_response.dart';
+export 'auth.dart';
+export 'user.dart';
 export 'pet.dart';
+export 'pet_health.dart';
 export 'medical_record.dart';
-export 'chat_message.dart';
 export 'appointment.dart';
+export 'ai_session.dart';
+export 'notification.dart';
+export 'common.dart';
