@@ -75,6 +75,11 @@ class AppRouter {
         builder: (context, state) => const PetMedicalRecordScreen(),
       ),
       GoRoute(
+        path: '/my-appointments',
+        name: 'my-appointments',
+        builder: (context, state) => const MyAppointmentsScreen(),
+      ),
+      GoRoute(
         path: '/settings',
         name: 'settings',
         builder: (context, state) => const SettingsScreen(),

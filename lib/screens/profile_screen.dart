@@ -146,6 +146,8 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   _MenuItem(Icons.file_present, '宠物电子病历表', backgroundColor: const Color(0xFFEFF6FF), iconColor: const Color(0xFF60A5FA), onTap: () => context.push('/pet-medical')),
                   const SizedBox(height: 12),
+                  _MenuItem(Icons.calendar_month, '我的预约', backgroundColor: AppColors.primaryLight, iconColor: AppColors.primary, onTap: () => context.push('/my-appointments')),
+                  const SizedBox(height: 12),
                   _MenuItem(Icons.notifications, '消息通知', backgroundColor: const Color(0xFFFEF3C7), iconColor: const Color(0xFFF59E0B), onTap: () {}),
                   const SizedBox(height: 12),
                   _MenuItem(Icons.power_settings_new, '退出登录', backgroundColor: const Color(0xFFFEE2E2), iconColor: const Color(0xFFF87171), textColor: const Color(0xFFF87171), showChevron: false, onTap: () async {

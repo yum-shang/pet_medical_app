@@ -87,14 +87,46 @@
   ],
   "appointments": [
     {
-      "id": "1",
-      "petId": "1",
-      "petName": "小橘",
-      "doctorName": "张医生",
-      "hospital": "爱心宠物医院总部",
-      "dateTime": "明天 14:00",
-      "reminderType": "就诊提醒",
-      "department": "皮肤科复查"
+      "id": 1001,
+      "appointment_no": "APT202603250001",
+      "pet_id": 1,
+      "pet_name": "小橘",
+      "hospital_id": 1,
+      "hospital_name": "爱心宠物医院总部",
+      "doctor_id": 1,
+      "doctor_name": "张医生",
+      "appointment_type": 2,
+      "symptom_description": "皮肤科复查",
+      "appointment_time": "2026-03-26 14:00:00",
+      "status": 1
+    },
+    {
+      "id": 1002,
+      "appointment_no": "APT202602150002",
+      "pet_id": 2,
+      "pet_name": "旺财",
+      "hospital_id": 2,
+      "hospital_name": "瑞鹏宠物医疗中心",
+      "doctor_id": 3,
+      "doctor_name": "王医生",
+      "appointment_type": 1,
+      "symptom_description": "年度体检",
+      "appointment_time": "2026-02-15 10:00:00",
+      "status": 2
+    },
+    {
+      "id": 1003,
+      "appointment_no": "APT202601100003",
+      "pet_id": 1,
+      "pet_name": "小橘",
+      "hospital_id": 1,
+      "hospital_name": "爱心宠物医院总部",
+      "doctor_id": 2,
+      "doctor_name": "李医生",
+      "appointment_type": 2,
+      "symptom_description": "食欲不佳",
+      "appointment_time": "2026-01-10 09:00:00",
+      "status": 3
     }
   ],
   "user": {

@@ -59,7 +59,7 @@ class PetService {
   }
 
   Future<int> addMedicalHistory(int petId, Map<String, dynamic> data) async {
-    if (await shouldUseMockData()) return 1;
+    if (await shouldUseMockData()) return _mock.mockAddMedicalHistory(petId, data);
     final resp = await _client.post(
       '/pets/$petId/medical-histories',
       body: data,
@@ -84,7 +84,7 @@ class PetService {
   }
 
   Future<int> addVaccination(int petId, Map<String, dynamic> data) async {
-    if (await shouldUseMockData()) return 1;
+    if (await shouldUseMockData()) return _mock.mockAddVaccination(petId, data);
     final resp = await _client.post(
       '/pets/$petId/vaccinations',
       body: data,
@@ -109,7 +109,7 @@ class PetService {
   }
 
   Future<int> addAllergy(int petId, Map<String, dynamic> data) async {
-    if (await shouldUseMockData()) return 1;
+    if (await shouldUseMockData()) return _mock.mockAddAllergy(petId, data);
     final resp = await _client.post(
       '/pets/$petId/allergies',
       body: data,

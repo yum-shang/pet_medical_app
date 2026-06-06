@@ -25,6 +25,11 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
   List<AllergyVO> _allergies = [];
   bool _isLoading = true;
 
+  /// 手风琴展开状态：用记录 id 标记当前展开的条目（同一区块内只允许展开一个）
+  int? _expandedHistoryId;
+  int? _expandedVaccinationId;
+  int? _expandedAllergyId;
+
   @override
   void initState() {
     super.initState();
@@ -76,6 +81,210 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     }
   }
 
+  /// 弹出底部卡片表单 — 新增病史
+  Future<void> _showAddHistorySheet() async {
+    final typeCtrl = TextEditingController();
+    final descCtrl = TextEditingController();
+    final dateCtrl = TextEditingController();
+    var isCurrent = 0;
+
+    final saved = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => _AddRecordSheet(
+          title: '新增病史',
+          onSave: () {
+            if (typeCtrl.text.trim().isEmpty || descCtrl.text.trim().isEmpty) {
+              ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('请填写病史类型和描述')));
+              return;
+            }
+            Navigator.pop(ctx, true);
+          },
+          children: [
+            _formField('病史类型', typeCtrl, hint: '如：呼吸系统疾病'),
+            _formField('详细描述', descCtrl, maxLines: 3, hint: '描述症状与诊断情况'),
+            _formField('诊断日期', dateCtrl, hint: '如：2025-06-01（可选）'),
+            SwitchListTile(
+              contentPadding: EdgeInsets.zero,
+              title: const Text('当前仍在患病', style: TextStyle(fontSize: 14)),
+              value: isCurrent == 1,
+              activeColor: AppColors.primary,
+              onChanged: (v) => setSheetState(() => isCurrent = v ? 1 : 0),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (saved == true && mounted) {
+      try {
+        await _petService.addMedicalHistory(widget.petId, {
+          'history_type': typeCtrl.text.trim(),
+          'description': descCtrl.text.trim(),
+          'diagnosed_at': dateCtrl.text.trim().isEmpty ? null : dateCtrl.text.trim(),
+          'is_current': isCurrent,
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('病史添加成功'), backgroundColor: Colors.green));
+          _loadData();
+        }
+      } catch (_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('添加失败'), backgroundColor: Colors.red));
+        }
+      }
+    }
+    typeCtrl.dispose();
+    descCtrl.dispose();
+    dateCtrl.dispose();
+  }
+
+  /// 弹出底部卡片表单 — 新增疫苗接种
+  Future<void> _showAddVaccinationSheet() async {
+    final nameCtrl = TextEditingController();
+    final dateCtrl = TextEditingController();
+    final nextDateCtrl = TextEditingController();
+    final hospitalCtrl = TextEditingController();
+    final remarkCtrl = TextEditingController();
+
+    final saved = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => _AddRecordSheet(
+        title: '新增疫苗接种',
+        onSave: () {
+          if (nameCtrl.text.trim().isEmpty || dateCtrl.text.trim().isEmpty) {
+            ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('请填写疫苗名称和接种日期')));
+            return;
+          }
+          Navigator.pop(ctx, true);
+        },
+        children: [
+          _formField('疫苗名称', nameCtrl, hint: '如：猫三联'),
+          _formField('接种日期', dateCtrl, hint: '如：2026-03-01'),
+          _formField('下次接种日期', nextDateCtrl, hint: '可选'),
+          _formField('接种医院', hospitalCtrl, hint: '可选'),
+          _formField('备注', remarkCtrl, maxLines: 2, hint: '可选'),
+        ],
+      ),
+    );
+
+    if (saved == true && mounted) {
+      try {
+        await _petService.addVaccination(widget.petId, {
+          'vaccine_name': nameCtrl.text.trim(),
+          'vaccination_date': dateCtrl.text.trim(),
+          'next_due_date': nextDateCtrl.text.trim().isEmpty ? null : nextDateCtrl.text.trim(),
+          'hospital_name': hospitalCtrl.text.trim().isEmpty ? null : hospitalCtrl.text.trim(),
+          'remark': remarkCtrl.text.trim().isEmpty ? null : remarkCtrl.text.trim(),
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('疫苗记录添加成功'), backgroundColor: Colors.green));
+          _loadData();
+        }
+      } catch (_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('添加失败'), backgroundColor: Colors.red));
+        }
+      }
+    }
+    nameCtrl.dispose();
+    dateCtrl.dispose();
+    nextDateCtrl.dispose();
+    hospitalCtrl.dispose();
+    remarkCtrl.dispose();
+  }
+
+  /// 弹出底部卡片表单 — 新增过敏史
+  Future<void> _showAddAllergySheet() async {
+    final allergenCtrl = TextEditingController();
+    final symptomCtrl = TextEditingController();
+    final remarkCtrl = TextEditingController();
+    var severity = RiskLevel.low;
+
+    final saved = await showModalBottomSheet<bool>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setSheetState) => _AddRecordSheet(
+          title: '新增过敏史',
+          onSave: () {
+            if (allergenCtrl.text.trim().isEmpty) {
+              ScaffoldMessenger.of(ctx).showSnackBar(const SnackBar(content: Text('请填写过敏原')));
+              return;
+            }
+            Navigator.pop(ctx, true);
+          },
+          children: [
+            _formField('过敏原', allergenCtrl, hint: '如：海鲜类罐头'),
+            _formField('症状描述', symptomCtrl, maxLines: 2, hint: '可选'),
+            DropdownButtonFormField<int>(
+              value: severity,
+              decoration: _inputDecoration('严重程度'),
+              items: const [
+                DropdownMenuItem(value: RiskLevel.low, child: Text('低')),
+                DropdownMenuItem(value: RiskLevel.medium, child: Text('中')),
+                DropdownMenuItem(value: RiskLevel.high, child: Text('高')),
+              ],
+              onChanged: (v) => setSheetState(() => severity = v ?? RiskLevel.low),
+            ),
+            const SizedBox(height: 12),
+            _formField('备注', remarkCtrl, maxLines: 2, hint: '可选'),
+          ],
+        ),
+      ),
+    );
+
+    if (saved == true && mounted) {
+      try {
+        await _petService.addAllergy(widget.petId, {
+          'allergen': allergenCtrl.text.trim(),
+          'symptom_description': symptomCtrl.text.trim().isEmpty ? null : symptomCtrl.text.trim(),
+          'severity_level': severity,
+          'remark': remarkCtrl.text.trim().isEmpty ? null : remarkCtrl.text.trim(),
+        });
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('过敏记录添加成功'), backgroundColor: Colors.green));
+          _loadData();
+        }
+      } catch (_) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('添加失败'), backgroundColor: Colors.red));
+        }
+      }
+    }
+    allergenCtrl.dispose();
+    symptomCtrl.dispose();
+    remarkCtrl.dispose();
+  }
+
+  /// 统一输入框装饰，供底部表单复用
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      labelStyle: const TextStyle(color: AppColors.textSub, fontSize: 14),
+      filled: true,
+      fillColor: AppColors.bgGray,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    );
+  }
+
+  Widget _formField(String label, TextEditingController ctrl, {String? hint, int maxLines = 1}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: TextField(
+        controller: ctrl,
+        maxLines: maxLines,
+        decoration: _inputDecoration(label).copyWith(hintText: hint),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_isLoading) {
@@ -123,7 +332,7 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                       }
                     },
                     itemBuilder: (_) => const [
-                      PopupMenuItem(value: 'edit', child: Text('编辑')),
+                      PopupMenuItem(value: 'edit', child: Text('修改详细信息')),
                       PopupMenuItem(value: 'delete', child: Text('删除', style: TextStyle(color: Colors.red))),
                     ],
                   ),
@@ -174,23 +383,61 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
                       _InfoRow('备注', pet.remark ?? '无'),
                     ]),
                     const SizedBox(height: 16),
-                    _buildSectionCard('病史', _histories.isEmpty ? '暂无病史记录' : null, _histories.map((h) => _HealthRecordItem(
-                      title: h.historyType,
-                      subtitle: h.description,
-                      date: h.diagnosedAt,
-                    )).toList()),
+                    _buildAccordionSection(
+                      title: '病史',
+                      emptyHint: '暂无病史记录',
+                      expandedId: _expandedHistoryId,
+                      onExpand: (id) => setState(() => _expandedHistoryId = _expandedHistoryId == id ? null : id),
+                      onAdd: _showAddHistorySheet,
+                      items: _histories.map((h) => _AccordionItemData(
+                        id: h.id,
+                        headerTitle: h.historyType,
+                        headerSubtitle: h.diagnosedAt ?? '未填写诊断日期',
+                        details: [
+                          _DetailLine('描述', h.description),
+                          if (h.diagnosedAt != null) _DetailLine('诊断日期', h.diagnosedAt!),
+                          _DetailLine('当前状态', h.isCurrent == 1 ? '仍在患病' : '已康复/历史记录'),
+                        ],
+                      )).toList(),
+                    ),
                     const SizedBox(height: 16),
-                    _buildSectionCard('疫苗接种', _vaccinations.isEmpty ? '暂无疫苗接种记录' : null, _vaccinations.map((v) => _HealthRecordItem(
-                      title: v.vaccineName,
-                      subtitle: '接种日期: ${v.vaccinationDate}${v.hospitalName != null ? ' | ${v.hospitalName}' : ''}',
-                      date: v.nextDueDate != null ? '下次: ${v.nextDueDate}' : null,
-                    )).toList()),
+                    _buildAccordionSection(
+                      title: '疫苗接种',
+                      emptyHint: '暂无疫苗接种记录',
+                      expandedId: _expandedVaccinationId,
+                      onExpand: (id) => setState(() => _expandedVaccinationId = _expandedVaccinationId == id ? null : id),
+                      onAdd: _showAddVaccinationSheet,
+                      items: _vaccinations.map((v) => _AccordionItemData(
+                        id: v.id,
+                        headerTitle: v.vaccineName,
+                        headerSubtitle: '接种日期: ${v.vaccinationDate}',
+                        details: [
+                          _DetailLine('接种日期', v.vaccinationDate),
+                          if (v.nextDueDate != null) _DetailLine('下次接种', v.nextDueDate!),
+                          if (v.hospitalName != null) _DetailLine('接种医院', v.hospitalName!),
+                          if (v.remark != null && v.remark!.isNotEmpty) _DetailLine('备注', v.remark!),
+                        ],
+                      )).toList(),
+                    ),
                     const SizedBox(height: 16),
-                    _buildSectionCard('过敏史', _allergies.isEmpty ? '暂无过敏记录' : null, _allergies.map((a) => _HealthRecordItem(
-                      title: a.allergen,
-                      subtitle: a.symptomDescription ?? '',
-                      date: '严重程度: ${RiskLevel.label(a.severityLevel)}',
-                    )).toList()),
+                    _buildAccordionSection(
+                      title: '过敏史',
+                      emptyHint: '暂无过敏记录',
+                      expandedId: _expandedAllergyId,
+                      onExpand: (id) => setState(() => _expandedAllergyId = _expandedAllergyId == id ? null : id),
+                      onAdd: _showAddAllergySheet,
+                      items: _allergies.map((a) => _AccordionItemData(
+                        id: a.id,
+                        headerTitle: a.allergen,
+                        headerSubtitle: '严重程度: ${RiskLevel.label(a.severityLevel)}',
+                        details: [
+                          if (a.symptomDescription != null && a.symptomDescription!.isNotEmpty)
+                            _DetailLine('症状', a.symptomDescription!),
+                          _DetailLine('严重程度', RiskLevel.label(a.severityLevel)),
+                          if (a.remark != null && a.remark!.isNotEmpty) _DetailLine('备注', a.remark!),
+                        ],
+                      )).toList(),
+                    ),
                     const SizedBox(height: 40),
                   ],
                 ),
@@ -214,18 +461,179 @@ class _PetDetailScreenState extends State<PetDetailScreen> {
     );
   }
 
-  Widget _buildSectionCard(String title, String? emptyText, List<Widget> items) {
+  /// 健康档案手风琴区块：每条记录可展开查看详情，最后一行「+」用于新增
+  Widget _buildAccordionSection({
+    required String title,
+    required String emptyHint,
+    required int? expandedId,
+    required ValueChanged<int> onExpand,
+    required VoidCallback onAdd,
+    required List<_AccordionItemData> items,
+  }) {
     return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(color: AppColors.white, borderRadius: BorderRadius.circular(24), boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2))]),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textMain)),
-        const SizedBox(height: 16),
-        if (emptyText != null)
-          Text(emptyText, style: const TextStyle(fontSize: 14, color: AppColors.textSub))
-        else
-          ...items,
-      ]),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 8, offset: const Offset(0, 2))],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(24, 24, 24, 8),
+            child: Text(title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.textMain)),
+          ),
+          if (items.isEmpty)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: Text(emptyHint, style: const TextStyle(fontSize: 14, color: AppColors.textSub)),
+            ),
+          ...items.map((item) {
+            final isExpanded = expandedId == item.id;
+            return Column(
+              children: [
+                InkWell(
+                  onTap: () => onExpand(item.id),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(item.headerTitle, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMain)),
+                              const SizedBox(height: 4),
+                              Text(item.headerSubtitle, style: const TextStyle(fontSize: 12, color: AppColors.textSub)),
+                            ],
+                          ),
+                        ),
+                        AnimatedRotation(
+                          turns: isExpanded ? 0.5 : 0,
+                          duration: const Duration(milliseconds: 200),
+                          child: const Icon(Icons.keyboard_arrow_down, color: AppColors.textSub),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                AnimatedCrossFade(
+                  firstChild: const SizedBox.shrink(),
+                  secondChild: Padding(
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: item.details.map((d) => Padding(
+                        padding: const EdgeInsets.only(bottom: 8),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(width: 72, child: Text(d.label, style: const TextStyle(fontSize: 12, color: AppColors.textSub))),
+                            Expanded(child: Text(d.value, style: const TextStyle(fontSize: 13, color: AppColors.textMain))),
+                          ],
+                        ),
+                      )).toList(),
+                    ),
+                  ),
+                  crossFadeState: isExpanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+                  duration: const Duration(milliseconds: 200),
+                ),
+                const Divider(height: 1, indent: 24, endIndent: 24, color: AppColors.gray100),
+              ],
+            );
+          }),
+          // 列表最后一行：点击弹出新增卡片
+          InkWell(
+            onTap: onAdd,
+            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(24)),
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              alignment: Alignment.center,
+              child: const Text('+', style: TextStyle(fontSize: 24, fontWeight: FontWeight.w300, color: AppColors.primary)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// 手风琴单条记录的数据结构
+class _AccordionItemData {
+  final int id;
+  final String headerTitle;
+  final String headerSubtitle;
+  final List<_DetailLine> details;
+
+  const _AccordionItemData({
+    required this.id,
+    required this.headerTitle,
+    required this.headerSubtitle,
+    required this.details,
+  });
+}
+
+class _DetailLine {
+  final String label;
+  final String value;
+  const _DetailLine(this.label, this.value);
+}
+
+/// 底部弹出的新增表单卡片容器
+class _AddRecordSheet extends StatelessWidget {
+  final String title;
+  final List<Widget> children;
+  final VoidCallback onSave;
+
+  const _AddRecordSheet({
+    required this.title,
+    required this.children,
+    required this.onSave,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    return Padding(
+      padding: EdgeInsets.only(bottom: bottomInset),
+      child: Container(
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.textMain)),
+                IconButton(
+                  icon: const Icon(Icons.close, color: AppColors.textSub),
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            ...children,
+            const SizedBox(height: 8),
+            ElevatedButton(
+              onPressed: onSave,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              ),
+              child: const Text('保存', style: TextStyle(fontWeight: FontWeight.bold)),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -242,27 +650,6 @@ class _InfoRow extends StatelessWidget {
       child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
         SizedBox(width: 80, child: Text(label, style: const TextStyle(fontSize: 14, color: AppColors.textSub))),
         Expanded(child: Text(value, style: const TextStyle(fontSize: 14, color: AppColors.textMain))),
-      ]),
-    );
-  }
-}
-
-class _HealthRecordItem extends StatelessWidget {
-  final String title;
-  final String subtitle;
-  final String? date;
-  const _HealthRecordItem({required this.title, required this.subtitle, this.date});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        if (date != null) Text(date!, style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.textSub)),
-        const SizedBox(height: 4),
-        Text(title, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: AppColors.textMain)),
-        const SizedBox(height: 4),
-        Text(subtitle, style: const TextStyle(fontSize: 14, color: AppColors.textSub)),
       ]),
     );
   }

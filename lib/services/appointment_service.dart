@@ -24,9 +24,11 @@ class AppointmentService {
     int? appointmentType,
   }) async {
     if (await shouldUseMockData()) {
-      return PaginatedData(
-        list: [],
-        pagination: Pagination(page: 1, pageSize: pageSize, total: 0),
+      return _mock.mockGetAppointments(
+        page: page,
+        pageSize: pageSize,
+        status: status,
+        appointmentType: appointmentType,
       );
     }
     final params = <String, String>{

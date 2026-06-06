@@ -15,6 +15,7 @@ class MockDataService {
 
   Map<String, dynamic>? _cache;
   List<PetVO>? _petsCache;
+  List<Map<String, dynamic>>? _appointmentsCache;
   UserVO? _mockUserProfile;
   int _mockSessionId = 1001;
   int _mockMessageId = 100;
@@ -246,8 +247,152 @@ class MockDataService {
     );
   }
 
+  /// 从 JSON 数组中计算下一个自增 id（Mock 新增记录时使用）
+  int _nextListId(List<dynamic> list) {
+    if (list.isEmpty) return 1;
+    return list
+            .map((e) => int.tryParse((e as Map<String, dynamic>)['id']?.toString() ?? '0') ?? 0)
+            .reduce(max) +
+        1;
+  }
+
+  /// POST /api/pets/{pet_id}/medical-histories — Mock 新增病史
+  Future<int> mockAddMedicalHistory(int petId, Map<String, dynamic> data) async {
+    final root = await _loadData();
+    final list = root['medicalHistories'] as List<dynamic>? ?? [];
+    root['medicalHistories'] = list;
+    final newId = _nextListId(list);
+    list.add({
+      'id': newId,
+      'pet_id': petId,
+      'history_type': data['history_type']?.toString() ?? '',
+      'description': data['description']?.toString() ?? '',
+      'diagnosed_at': data['diagnosed_at']?.toString(),
+      'is_current': data['is_current'] ?? 0,
+    });
+    return newId;
+  }
+
+  /// POST /api/pets/{pet_id}/vaccinations — Mock 新增疫苗记录
+  Future<int> mockAddVaccination(int petId, Map<String, dynamic> data) async {
+    final root = await _loadData();
+    final list = root['vaccinations'] as List<dynamic>? ?? [];
+    root['vaccinations'] = list;
+    final newId = _nextListId(list);
+    list.add({
+      'id': newId,
+      'pet_id': petId,
+      'vaccine_name': data['vaccine_name']?.toString() ?? '',
+      'vaccination_date': data['vaccination_date']?.toString() ?? '',
+      'next_due_date': data['next_due_date']?.toString(),
+      'hospital_name': data['hospital_name']?.toString(),
+      'remark': data['remark']?.toString(),
+    });
+    return newId;
+  }
+
+  /// POST /api/pets/{pet_id}/allergies — Mock 新增过敏记录
+  Future<int> mockAddAllergy(int petId, Map<String, dynamic> data) async {
+    final root = await _loadData();
+    final list = root['allergies'] as List<dynamic>? ?? [];
+    root['allergies'] = list;
+    final newId = _nextListId(list);
+    list.add({
+      'id': newId,
+      'pet_id': petId,
+      'allergen': data['allergen']?.toString() ?? '',
+      'symptom_description': data['symptom_description']?.toString(),
+      'severity_level': data['severity_level'] ?? 1,
+      'remark': data['remark']?.toString(),
+    });
+    return newId;
+  }
+
   Future<Map<String, dynamic>> mockCreateAppointment(Map<String, dynamic> data) async {
-    return {'appointment_id': DateTime.now().millisecondsSinceEpoch % 100000};
+    final list = await _getAppointmentsRaw();
+    final newId = _nextListId(list);
+    final appointmentNo = 'APT${DateTime.now().millisecondsSinceEpoch}';
+
+    // 根据 id 反查名称，便于列表展示（Mock 环境无联表查询）
+    final pets = await mockGetPets();
+    final hospitals = await mockGetHospitals();
+    final doctors = await mockGetDoctors(data['hospital_id'] as int? ?? 0);
+
+    final petId = data['pet_id'] as int? ?? 0;
+    final hospitalId = data['hospital_id'] as int? ?? 0;
+    final doctorId = data['doctor_id'] as int? ?? 0;
+
+    final petList = pets.where((p) => p.id == petId).toList();
+    final hospitalList = hospitals.where((h) => h.id == hospitalId).toList();
+    final doctorList = doctors.where((d) => d.id == doctorId).toList();
+
+    list.add({
+      'id': newId,
+      'appointment_no': appointmentNo,
+      'pet_id': petId,
+      'pet_name': petList.isEmpty ? '未知宠物' : petList.first.petName,
+      'hospital_id': hospitalId,
+      'hospital_name': hospitalList.isEmpty ? '未知医院' : hospitalList.first.hospitalName,
+      'doctor_id': doctorId,
+      'doctor_name': doctorList.isEmpty ? '未知医生' : doctorList.first.doctorName,
+      'appointment_type': data['appointment_type'] ?? AppointmentType.consultation,
+      'symptom_description': data['symptom_description']?.toString(),
+      'appointment_time': data['appointment_time']?.toString() ?? '',
+      'status': AppointmentStatus.pending,
+    });
+    _appointmentsCache = list;
+
+    return {
+      'appointment_id': newId,
+      'appointment_no': appointmentNo,
+      'status': AppointmentStatus.pending,
+    };
+  }
+
+  /// 读取预约原始 JSON 列表（优先内存缓存，便于 Mock 新增后立即可查）
+  Future<List<Map<String, dynamic>>> _getAppointmentsRaw() async {
+    if (_appointmentsCache != null) return _appointmentsCache!;
+    final root = await _loadData();
+    final raw = (root['appointments'] as List<dynamic>? ?? [])
+        .map((e) => Map<String, dynamic>.from(e as Map<String, dynamic>))
+        .toList();
+    _appointmentsCache = raw;
+    return raw;
+  }
+
+  /// GET /api/appointments — 获取我的预约列表（支持 status、appointment_type 筛选与分页）
+  Future<PaginatedData<AppointmentVO>> mockGetAppointments({
+    int page = 1,
+    int pageSize = 10,
+    int? status,
+    int? appointmentType,
+  }) async {
+    var list = await _getAppointmentsRaw();
+
+    if (status != null) {
+      list = list.where((e) => e['status'] == status).toList();
+    }
+    if (appointmentType != null) {
+      list = list.where((e) => e['appointment_type'] == appointmentType).toList();
+    }
+
+    // 按预约时间倒序，最近的排在前面
+    list.sort((a, b) {
+      final ta = a['appointment_time']?.toString() ?? '';
+      final tb = b['appointment_time']?.toString() ?? '';
+      return tb.compareTo(ta);
+    });
+
+    final total = list.length;
+    final start = (page - 1) * pageSize;
+    final pageList = start >= total
+        ? <Map<String, dynamic>>[]
+        : list.sublist(start, min(start + pageSize, total));
+
+    return PaginatedData(
+      list: pageList.map(AppointmentVO.fromJson).toList(),
+      pagination: Pagination(page: page, pageSize: pageSize, total: total),
+    );
   }
 
   /// 创建 AI 会话，并预置欢迎语
